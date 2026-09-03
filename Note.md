@@ -1,5 +1,5 @@
 <img width="1207" height="760" alt="image" src="https://github.com/user-attachments/assets/1ea59e47-f98e-414f-8bea-05942b6a8e20" />
-
+NOTES FROM QUASIM CHAUDHARI "Wireless Com"
 
 ## Timing Error Detector (TED)
 The *input* of TED is the *output* of interpolator ($z(mT_M+\epsilon_\Delta)$, the output of matched filter), the output is the $e_D[m]$. How to find out the $e_D[m]$?
@@ -77,8 +77,47 @@ which implies that the estimated $\hat{\epsilon_\Delta}$ $>$ actual $\epsilon_\D
 
 
 ## Interpolator block
+One question I ask myself: in the beginning chart, there are some samples say nTs, and the output is $z(mT_M+\hat{\epsilon_\Delta})$, how the interpolator know what is the value between these samples?\
+<img width="770" height="256" alt="image" src="https://github.com/user-attachments/assets/b54971b6-c424-4f55-bab8-9819597562c1" />
+
+>The input samples are 🔵 BLUE dots, while we need to know the ◯ dot.
 
 The major jobs of Interpolator block (IB) are:
 1. find out the time delay $\epsilon_\Delta$ and
 2. find out which sample (nTs) is the basic index for maximum eye open.
+
+### Polynomial Interpolation
+With the help of near samples, we first assume that the matched filter output $z(nT_s)$ is waveform of $z(t)$
+> $z(t) \approx c_p t^p + c_{p-1} t^{p-1} + ... + c_1 t + c_0$
+
+#### Linear Interpolation, p =1
+> $z(t) \approx c_1 t + c_0$\
+> $z(nT_s) = c_1 (nTs) + c_0$\
+> $z((n+1)T_s) = c_1 ((n+1)Ts) + c_0$
+
+two coefficients $c0,c1$ and two equations will solve them.\
+with the help of two coefficents, the final target 
+> $z(nT_s+\mu _{m}T_s) = \mu _{m} z((n+1)T_s) + (1-\mu _{m}) z(nT_s)$ 
+
+#### Cubic Interpolation, p =3
+Like Linear interpolation, we just give the final target result:
+> $z(nT_s+\mu _{m}T_s) = (\frac{{\mu _{m}}^3}{6} - \frac{\mu _{m}}{6}) z((n+2)T_s) +$\
+>                        $(-\frac{{\mu _{m}}^3}{2}+\frac{{\mu _{m}}^2}{2} + \mu _{m})z((n+1)T_s) +$\
+>                        $(\frac{{\mu _{m}}^3}{2}-{\mu _{m}}^2 - \frac{\mu _{m}}{2} + 1)z(nT_s) +$\
+>                        $(-\frac{{\mu _{m}}^3}{6}+\frac{{\mu _{m}}^2}{2} - \frac{\mu _{m}}{3})z((n-1)T_s)$
+
+#### Quadratic Interpolation, p =2
+> hint: if we use only 3 samples, then how we can differentiate the middle sample? like between n and n+1, the formula will be:\
+> $z(nT_s+\mu _{m}T_s) = (\frac{{\mu _{m}}^2-\mu _{m}}{2})z((n-1)T_s) + (1-{\mu _{m}}^2)z(nTs) + (\frac{{\mu _{m}}^2+\mu _{m}}{2}) z((n+1)T_s)$\
+> After searching on some AI, that say how to represent the middle point  $z(nT_s+\mu _{m}T_s)$ is not important, but the derivate of mid sample just ignore the left part.\
+> ${\color{red}BUT\ NOW\ I\ STILL\ NOT\ GET\ IT.\ WILL\ UPDATES\ WHEN\ I\ GET\ IT.\ TODO}$
+
+another way is to add another sample n+2, it will solve the problem.
+
+#### Generation Interpolation, p = $\infty$
+we set the $\mu _m$ related coefficients as the values of $h[n]$. we can generalize the above polynomial interpolation as $h[n]$ convoluted with the $z(nTs)$ to get the target $z(nT_s+\mu _m)$.
+> Hint: keep in mind that $h[n]$ is just the discrete presentation of underlying continious $h(t)$ filter.\
+> $h[-1]$ is actually the sample at the point $t=-1+\mu _m$.
+
+In other words, if we increase the $\mu _m$ from 0 to 1, then the $h[-1]$ is correlated to the $z((n+1))T_s$ should be increased from 0 to 1. The more polynomial, it will becomes sinc function.
 
