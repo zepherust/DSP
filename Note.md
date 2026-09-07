@@ -121,3 +121,12 @@ we set the $\mu _m$ related coefficients as the values of $h[n]$. we can general
 
 In other words, if we increase the $\mu _m$ from 0 to 1, then the $h[-1]$ is correlated to the $z((n+1))T_s$ should be increased from 0 to 1. The more polynomial, it will becomes sinc function.
 
+## Interpolator control
+So basically, how to get the fractional between n and n+1 ($\mu _m$) for symbol m is 
+> $\mu _m = \frac{1-\lambda[n_m]}{W[n_m]}$ \
+> $W[n] = \frac{1}{L} + e_F[n]$, I call it a small step, and \
+> which $\lambda[n_m]$ is a modulo-1 counter, whic $\lambda[n+1] = (\lambda[n] + W[n])mod 1$
+
+## In summary
+<img width="825" height="585" alt="image" src="https://github.com/user-attachments/assets/3faa6174-fb63-41dd-ac20-1e6fed86de48" />
+
