@@ -130,3 +130,23 @@ So basically, how to get the fractional between n and n+1 ($\mu _m$) for symbol 
 ## In summary
 <img width="825" height="585" alt="image" src="https://github.com/user-attachments/assets/3faa6174-fb63-41dd-ac20-1e6fed86de48" />
 
+## M&M TED
+The main idea of M&M TED is the left side of $r_p(nT_s)$ is symmetric around 0, so $r_p(mT_M)$ and $r_p(-mT_m)$ are the same. And another advantage is it can only use 1 sample/symbol and reduce the self-noise. why? the reason will follow after.\
+
+<img width="880" height="299" alt="image" src="https://github.com/user-attachments/assets/a11340fa-9a6d-4f63-add2-7f81033b0a16" />
+
+in short, the output of this TED is :
+> $e[m] = a[m-1]z(mT_m+\hat{\epsilon_\Delta}) - a[m]z((m-1)T_m+\hat{\epsilon_\Delta})$
+
+One problem of M&M is that it better used in a scenario without carrier frequency offset.
+
+## Band Edge TED
+The upper band and lower band once used in the carrier frequency offset estimation, while it only uses the Inphase part, the Quadrature part which can be used to represents the output of TED:
+> $e_D[n]=\textbraceleft z_{BE+}(nT_s) \  z^*_{BE-}(nT_s) \textbraceright _Q$
+
+How exactly it will cancel the effects of CFO? \
+
+Considering the scenario of CFO,\
+<img width="203" height="80" alt="image" src="https://github.com/user-attachments/assets/ea41ebd8-1764-4d24-9d3d-d406297d5edd" />
+
+The frequency domain view of band edge filter and rx signals, there is a sinc function in $F=0$, which means that in time domain view, there is a DC component, like $A+sin(x)$, which will have 2 parts in $F = \pm \frac{1}{T_M}$ and $F=0$.
